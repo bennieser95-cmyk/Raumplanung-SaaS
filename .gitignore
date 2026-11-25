@@ -1,0 +1,10 @@
+# Secrets und lokale Umgebungen – niemals committen
+.env*
+!.env.example
+Credentials.txt
+
+# Persönliche Editor-Einstellungen
+.vscode/settings.json
+
+# Abhängigkeiten und Build-Artefakte (versehentliche Installation im Repo-Root)
+node_modules/
