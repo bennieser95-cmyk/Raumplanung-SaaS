@@ -1,26 +1,301 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Design-Tokens „Raumplanung“
+ * ---------------------------------------------------------------------------
+ * Struktur nach shadcn/ui (Tailwind 4): Rohwerte als CSS-Variablen in :root,
+ * Zuordnung zu Tailwind-Utilities über @theme inline. Ein späterer Dark-Mode
+ * überschreibt nur die Variablen unter `.dark` (siehe @custom-variant).
+ *
+ * Geprüfte Kontraste (WCAG 2.1 AA; Text ≥ 4,5:1, UI-Elemente/Grafik ≥ 3:1):
+ *   Text #1B2541 auf Karte #FFFFFF ........................ 15,13:1
+ *   Text #1B2541 auf Hintergrund #F5F7FB .................. 14,11:1
+ *   Sekundärtext #5A6380 auf #FFFFFF / #F5F7FB ............ 5,95:1 / 5,54:1
+ *   Weiß auf Primär #5B3DF5 ............................... 6,12:1
+ *   Weiß auf Verlaufsende #6B4EFF ......................... 5,05:1
+ *     (Vorlage #7C5CFF hätte nur 4,35:1 → bewusst abgedunkelt)
+ *   Primär #5B3DF5 als Link/Fokusring auf #FFFFFF/#F5F7FB . 6,12:1 / 5,71:1
+ *   Weiß auf Sidebar #11163A .............................. 17,50:1
+ *   Sidebar-Sekundärtext #C3C8E3 auf #11163A .............. 10,58:1
+ *   Sidebar-Fokusring #A99BFF auf #11163A ................. 7,35:1
+ *   Weiß auf Zähler-Badge #D92D20 ......................... 4,83:1
+ *   Eingabe-Rahmen #7A8499 auf #FFFFFF .................... 3,76:1
+ *   Status-Flächen (Grundriss) auf #FFFFFF / #F5F7FB:
+ *     frei #15923F ........................................ 4,03:1 / 3,75:1
+ *     belegt #C76A00 ...................................... 3,83:1 / 3,57:1
+ *     nicht verfügbar #768093 ............................. 3,98:1 / 3,71:1
+ *     meins #2563EB ....................................... 5,17:1 / 4,82:1
+ *     Wartung #667085 (+ Streifenmuster) .................. 4,97:1
+ *   Status-Badges (Text auf getönter Fläche):
+ *     frei #126B3A auf #E7F6EC ............................ 5,89:1
+ *     belegt #9A4A00 auf #FFF1E0 .......................... 5,64:1
+ *     nicht verfügbar #475467 auf #EEF1F5 ................. 6,79:1
+ *     meins #1D4ED8 auf #E6EEFF ........................... 5,76:1
+ *     Wartung #344054 auf #EAECF0 (dunkelster Streifen #DCDFE5) 8,84:1 / 7,84:1
+ *   Systemstatus-Badges:
+ *     ok #067647 auf #E7F6EC .............................. 5,09:1
+ *     eingeschränkt #B54708 auf #FFF4E5 ................... 4,99:1
+ *     ausgefallen #B42318 auf #FEF0EF ..................... 5,92:1
+ *   Trend: steigend #067647 / fallend #B42318 auf #FFFFFF .. 5,69:1 / 6,57:1
+ *   Kennzahl-Icon-Quadrate (weißes Icon, Grafik ≥ 3:1):
+ *     Violett #5B3DF5 6,12 · Grün #15923F 4,03 · Orange #EA580C 3,56 ·
+ *     Blau #2563EB 5,17 · Pink #DB2777 4,60
+ */
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Typografie */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* shadcn-Basisfarben */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-heading: var(--heading);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Rückmeldungen */
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-error: var(--error);
+  --color-error-subtle: var(--error-subtle);
+  --color-notification: var(--notification);
+  --color-notification-foreground: var(--notification-foreground);
+
+  /* Platz-/Raumstatus (Grundriss, Kalender) */
+  --color-status-free: var(--status-free);
+  --color-status-free-subtle: var(--status-free-subtle);
+  --color-status-free-foreground: var(--status-free-foreground);
+  --color-status-occupied: var(--status-occupied);
+  --color-status-occupied-subtle: var(--status-occupied-subtle);
+  --color-status-occupied-foreground: var(--status-occupied-foreground);
+  --color-status-unavailable: var(--status-unavailable);
+  --color-status-unavailable-subtle: var(--status-unavailable-subtle);
+  --color-status-unavailable-foreground: var(--status-unavailable-foreground);
+  --color-status-mine: var(--status-mine);
+  --color-status-mine-subtle: var(--status-mine-subtle);
+  --color-status-mine-foreground: var(--status-mine-foreground);
+  --color-status-maintenance: var(--status-maintenance);
+  --color-status-maintenance-subtle: var(--status-maintenance-subtle);
+  --color-status-maintenance-foreground: var(--status-maintenance-foreground);
+
+  /* Systemstatus */
+  --color-system-ok: var(--system-ok);
+  --color-system-ok-subtle: var(--system-ok-subtle);
+  --color-system-ok-foreground: var(--system-ok-foreground);
+  --color-system-degraded: var(--system-degraded);
+  --color-system-degraded-subtle: var(--system-degraded-subtle);
+  --color-system-degraded-foreground: var(--system-degraded-foreground);
+  --color-system-down: var(--system-down);
+  --color-system-down-subtle: var(--system-down-subtle);
+  --color-system-down-foreground: var(--system-down-foreground);
+
+  /* Kennzahl-Akzente */
+  --color-kpi-violet: var(--kpi-violet);
+  --color-kpi-green: var(--kpi-green);
+  --color-kpi-orange: var(--kpi-orange);
+  --color-kpi-blue: var(--kpi-blue);
+  --color-kpi-pink: var(--kpi-pink);
+  --color-trend-up: var(--trend-up);
+  --color-trend-down: var(--trend-down);
+
+  /* Diagramme (später Recharts) */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radien: Bedienelemente 8 px (lg), Karten 12 px (xl), Pills voll gerundet */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 3);
+  --radius-4xl: calc(var(--radius) * 4);
+
+  /* Schatten */
+  --shadow-card: var(--elevation-card);
+  --shadow-card-hover: var(--elevation-card-hover);
+  --shadow-pill: var(--elevation-pill);
+
+  /* Layout-Abstände (erzeugen z. B. w-sidebar, h-topbar) */
+  --spacing-sidebar: 16rem;
+  --spacing-sidebar-rail: 4.5rem;
+  --spacing-topbar: 4rem;
+  --spacing-content: 75rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.5rem;
+
+  --background: #f5f7fb;
+  --foreground: #1b2541;
+  --heading: #1b2541;
+  --card: #ffffff;
+  --card-foreground: #1b2541;
+  --popover: #ffffff;
+  --popover-foreground: #1b2541;
+  --primary: #5b3df5;
+  --primary-hover: #4a2fd9;
+  --primary-foreground: #ffffff;
+  --primary-gradient: linear-gradient(135deg, #5b3df5 0%, #6b4eff 100%);
+  --secondary: #eef1f7;
+  --secondary-foreground: #1b2541;
+  --muted: #eef1f7;
+  --muted-foreground: #5a6380;
+  --accent: #efebff;
+  --accent-foreground: #1b2541;
+  --destructive: #b42318;
+  --border: #e3e8ef;
+  --input: #7a8499;
+  --ring: #5b3df5;
+
+  --sidebar: #11163a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-muted: #c3c8e3;
+  --sidebar-primary: #5b3df5;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e2550;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #262d5c;
+  --sidebar-ring: #a99bff;
+
+  --success: #067647;
+  --success-subtle: #e7f6ec;
+  --warning: #b54708;
+  --warning-subtle: #fff4e5;
+  --error: #b42318;
+  --error-subtle: #fef0ef;
+  --notification: #d92d20;
+  --notification-foreground: #ffffff;
+
+  --status-free: #15923f;
+  --status-free-subtle: #e7f6ec;
+  --status-free-foreground: #126b3a;
+  --status-occupied: #c76a00;
+  --status-occupied-subtle: #fff1e0;
+  --status-occupied-foreground: #9a4a00;
+  --status-unavailable: #768093;
+  --status-unavailable-subtle: #eef1f5;
+  --status-unavailable-foreground: #475467;
+  --status-mine: #2563eb;
+  --status-mine-subtle: #e6eeff;
+  --status-mine-foreground: #1d4ed8;
+  --status-maintenance: #667085;
+  --status-maintenance-subtle: #eaecf0;
+  --status-maintenance-foreground: #344054;
+  --status-maintenance-pattern: repeating-linear-gradient(
+    135deg,
+    transparent 0 4px,
+    rgb(52 64 84 / 0.08) 4px 8px
+  );
+
+  --system-ok: #15923f;
+  --system-ok-subtle: #e7f6ec;
+  --system-ok-foreground: #067647;
+  --system-degraded: #c76a00;
+  --system-degraded-subtle: #fff4e5;
+  --system-degraded-foreground: #b54708;
+  --system-down: #d92d20;
+  --system-down-subtle: #fef0ef;
+  --system-down-foreground: #b42318;
+
+  --kpi-violet: #5b3df5;
+  --kpi-green: #15923f;
+  --kpi-orange: #ea580c;
+  --kpi-blue: #2563eb;
+  --kpi-pink: #db2777;
+  --trend-up: #067647;
+  --trend-down: #b42318;
+
+  --chart-1: #5b3df5;
+  --chart-2: #15923f;
+  --chart-3: #ea580c;
+  --chart-4: #2563eb;
+  --chart-5: #db2777;
+
+  --elevation-card: 0 1px 2px rgb(17 22 58 / 0.04), 0 4px 16px rgb(17 22 58 / 0.06);
+  --elevation-card-hover: 0 2px 4px rgb(17 22 58 / 0.06), 0 8px 24px rgb(17 22 58 / 0.1);
+  --elevation-pill: 0 6px 16px rgb(91 61 245 / 0.35);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring;
+  }
+  html {
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading text-heading;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .bg-primary-gradient {
+    background-image: var(--primary-gradient);
+  }
+  .bg-maintenance-pattern {
+    background-image: var(--status-maintenance-pattern);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -15,12 +15,15 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="de">
       <body>
-        <h2>Something went wrong!</h2>
-        <button type="button" onClick={() => retry()}>
-          Try again
-        </button>
+        <main>
+          <h2>Etwas ist schiefgelaufen.</h2>
+          <p>Die Seite konnte nicht geladen werden.</p>
+          <button type="button" onClick={() => retry()}>
+            Erneut versuchen
+          </button>
+        </main>
       </body>
     </html>
   );
