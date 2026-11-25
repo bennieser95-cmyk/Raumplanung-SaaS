@@ -1,0 +1,11 @@
+{
+  // TEMPORÄR (Phase 0): nur Konto-/Doku-Tools, um das Entwicklungsprojekt "Raumplanungs_SaaS" anzulegen.
+  // Nach dem Anlegen wird die URL auf ?project_ref=<ref>&read_only=true&features=database,docs,debugging,development umgestellt.
+  // Anmeldung per OAuth im Browser – hier stehen keine Tokens.
+  "servers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?features=account,docs"
+    }
+  }
+}
