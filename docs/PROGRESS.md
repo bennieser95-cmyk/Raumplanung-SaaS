@@ -83,15 +83,17 @@ Status: offen · in Arbeit · erledigt · **Frage** (Freigabe nötig, siehe Absc
 
 | Datum | Agent | Aufgabe | Ergebnis | Skills/MCPs | Tests | Commit |
 |---|---|---|---|---|---|---|
-| 2026-11-25 | Main | Phase 0: Vorlagen ausgewertet, Matrix, Stack-Analyse, Konzepte | Erste Fassung PROGRESS/ARCHITECTURE | Web-Suche/Fetch (Supabase-Doku, Kalender-Lizenzen), Next-16-Doku aus `node_modules/next/dist/docs` | Baseline: `bun run lint` ✔, `tsc --noEmit` ✔ | – (noch nicht committet) |
+| 2026-11-25 | Main | GitHub-Einrichtung (Labels, Meilensteine Phase 0–6, 24 Issues, Project #2) | **Teilweise**: Labels und 2 Meilensteine angelegt; Issues wegen GitHub-Störung („Issues: major_outage“ laut githubstatus.com) noch nicht. Idempotentes Skript wird nach Ende der Störung erneut ausgeführt. | gh CLI | – | – |
+| 2026-11-25 | Main | Supabase-Dev-Projekt angelegt, MCP umgestellt | Projekt `Raumplanungs_SaaS` (Ref `nojkevaqbjllfhhehxok`, eu-central-1, Postgres 17, Free-Tarif, 0 €) per MCP angelegt; Status ACTIVE_HEALTHY; Security-Advisors: keine Befunde. `.vscode/mcp.json` jetzt `project_ref` + `read_only=true` + `features=database,docs,debugging,development`. Bestehendes Projekt „Raumplanung-SaaS“ (eu-west-1) enthält laut Nutzer **Produktivdaten** und wird **nicht** angefasst. Docker Desktop 29.9.3 läuft. | Supabase-MCP (`list_organizations`, `list_projects`, `create_project`, `get_project`, `get_advisors`) | Advisors ✔ | siehe Git |
+| 2026-11-25 | Main | Phase 0: Vorlagen ausgewertet, Matrix, Stack-Analyse, Konzepte | Erste Fassung PROGRESS/ARCHITECTURE | Web-Suche/Fetch (Supabase-Doku, Kalender-Lizenzen), Next-16-Doku aus `node_modules/next/dist/docs` | Baseline: `bun run lint` ✔, `tsc --noEmit` ✔ | `077b492` |
 | 2026-11-25 | Main | Supabase-MCP vorbereitet | `.vscode/mcp.json` **temporär** mit `features=account,docs` (ohne Token, ohne Projektbindung) zum Anlegen des Projekts; danach Umstellung auf `project_ref` + `read_only=true` | – | – | – |
 | 2026-11-25 | Main | GitHub CLI installiert | `gh` 2.105.0 per winget (Hash geprüft); Anmeldung durch Nutzer ausstehend | – | – | – |
 | 2026-11-25 | Main | Supabase-Skills installiert | `supabase` v0.1.2 und `supabase-postgres-best-practices` v1.1.1 aus `supabase/agent-skills` (MIT, Commit `c9be0e9`), Befehl `npx skills add supabase/agent-skills --skill '*' -y --copy`; nach `.github/skills/` verschoben (Repo-Konvention), Herkunft in `skills-lock.json`. Inhalt geprüft, unauffällig. Laden erst nach Neustart der Sitzung möglich (Katalog wird beim Start gelesen). | skills CLI (vercel-labs/skills) | Ladetest in laufender Sitzung: nicht sichtbar (erwartet) | – |
 
 ### Genutzte und fehlende Werkzeuge (Phase 0)
 
-- **Vorhanden/genutzt:** Web-Suche/Fetch, PowerShell, Next.js-Doku im Paket, Skills `defensive-appsec-triage`, Strix-Security-Skills (für Wächter vorgesehen), GitHub-MCP (nur lesend), Neon-MCP (nicht relevant, wird nicht genutzt), Figma-MCP (keine Figma-Datei vorhanden).
-- **Fehlend:** Supabase-MCP (OAuth ausstehend), Supabase-Skills in der laufenden Sitzung (Neustart nötig), Schreibzugriff auf GitHub Issues/Projects (`gh auth login` ausstehend), Docker (für lokale Supabase-Instanz und pgTAP-Tests), Context7 o. ä. Doku-MCP.
+- **Vorhanden/genutzt:** Web-Suche/Fetch, PowerShell, Next.js-Doku im Paket, Supabase-MCP (OAuth, jetzt read-only + projektgebunden), gh CLI (Scopes repo, project, read:org, workflow), Docker Desktop, Sentry-Konto + Plugin (Nutzer), Skills `defensive-appsec-triage`, Strix-Security-Skills (für Wächter vorgesehen), GitHub-MCP (nur lesend), Neon-MCP (nicht relevant, wird nicht genutzt), Figma-MCP (keine Figma-Datei vorhanden).
+- **Fehlend:** Supabase-Skills in der laufenden Sitzung (Neustart nötig), Context7 o. ä. Doku-MCP.
 
 ## 5. Wächter-Berichte und Befunde
 
@@ -107,7 +109,7 @@ Noch keine Prüfung (Wächter startet nach Freigabe von Phase 0). Erste Hinweise
 
 | Datum | Entscheidung | Begründung | Alternativen |
 |---|---|---|---|
-| 2026-11-25 | Neues Supabase-Projekt „Raumplanungs_SaaS“, Region Frankfurt (eu-central-1) | Vorgabe Nutzer, DSGVO | bestehendes Projekt |
+| 2026-11-25 | Neues Supabase-Projekt „Raumplanungs_SaaS“, Region Frankfurt (eu-central-1), Ref `nojkevaqbjllfhhehxok` – **Entwicklungsprojekt** | Vorgabe Nutzer, DSGVO; bestehendes Projekt enthält Produktivdaten (Regel 10) | bestehendes Projekt „Raumplanung-SaaS“ (Irland, produktiv – tabu) |
 | 2026-11-25 | Verbindung: Supabase-MCP + Supabase CLI + API-Schlüssel (kein DB-String) | Nutzer; CLI wegen versionierter Migrationen, Typen, pgTAP | nur MCP |
 | 2026-11-25 | Umgebungen: lokal (Docker) + Cloud-Entwicklungsprojekt; Produktion getrennt | Nutzer; Docker wird installiert | nur Cloud |
 | 2026-11-25 | Projekt wird vom Agenten per MCP angelegt (temporär Konto-Tools, danach read-only + Projektbindung) | Nutzerwunsch (Empfehlung war Anlage im Dashboard) | Anlage durch Nutzer |
@@ -124,16 +126,15 @@ Noch keine Prüfung (Wächter startet nach Freigabe von Phase 0). Erste Hinweise
 | 2026-11-25 | Error-Tracking: **Sentry (EU-Region) ab Phase 1** | Nutzer | eigene Lösung zuerst |
 | 2026-11-25 | Hosting: Vercel, Region Frankfurt | Nutzer | eigener Server |
 | 2026-11-25 | Systemstatus: Plattform-Super-Admin sieht alles; Mandanten-Admins nur Komponentenstatus + eigene Daten; Warnungen nur im Dashboard | Nutzer | – |
-| 2026-11-25 | GitHub Project: https://github.com/users/bennieser95-cmyk/projects/2 | Nutzer | – |
+| 2026-11-25 | GitHub Project: https://github.com/users/bennieser95-cmyk/projects/2. Statuszuordnung: Backlog → Backlog, In Progress → „In progress“, In Review → „In review“, Done → Done; **Blocked** gibt es im Project nicht → Label `blocked` (keine Strukturänderung am Project). Priorität: Critical → P0, High → P1, Medium/Low → P2, zusätzlich Labels `priority: …`. Phasen als Meilensteine, Agenten als Labels `agent: …`, Abhängigkeiten als „blocked by“-Verknüpfung + Text, Phase-1-Aufgaben als Sub-Issues des Epics | bestehende Project-Felder nutzen | neues Statusfeld |
 
 ## 7. Offene Fragen und Risiken
 
-**Offen (Werkzeuge, durch Nutzer):**
-1. Supabase-MCP in VS Code starten und per OAuth anmelden, danach Sitzung neu laden → Main Agent legt Projekt an (Kostenbestätigung erforderlich).
-2. `gh auth login` mit Scopes `repo`, `project`, `read:org`.
-3. Docker Desktop installieren (Admin-Rechte, WSL2).
-4. Sentry-Konto mit EU-Datenregion anlegen.
-5. Nach Projektanlage: DB-Passwort im Dashboard zurücksetzen und `DATABASE_URL`/`DIRECT_URL` sowie API-Schlüssel in `saas/.env.local` eintragen.
+**Offen (Werkzeuge):**
+1. GitHub-Issues anlegen, sobald die GitHub-Störung behoben ist (Main Agent).
+2. Nutzer: DB-Passwort des Dev-Projekts im Dashboard zurücksetzen und `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_SENTRY_DSN` des **Dev-Projekts** in `saas/.env.local` eintragen (Datei existiert noch nicht).
+3. Nutzer: Secret Scanning und Push Protection aktivieren.
+4. Sitzung neu laden, damit die Supabase-Skills geladen werden.
 
 **Risiken**
 - Prisma + Supabase: Pooler (Transaction-Modus, Port 6543) erfordert `pgbouncer=true`/keine Prepared Statements; RLS-Extension erzeugt Overhead je Abfrage (Transaktion + `set_config`) → Messung in Phase 1. Realtime, Storage und Auth laufen weiterhin über supabase-js.

@@ -11,7 +11,7 @@
 | Styling | Tailwind CSS **4.3** (`@tailwindcss/turbopack`), Schrift Geist |
 | Paketmanager | **Bun 1.3.14** (`bun.lock`) |
 | Qualität | ESLint 9 (`eslint-config-next`), TypeScript strict; **keine Tests**, keine CI |
-| DB/Auth | nicht vorhanden (kein Prisma, kein Clerk → nichts zu entfernen) |
+| DB/Auth | Supabase-Entwicklungsprojekt `Raumplanungs_SaaS` (Ref `nojkevaqbjllfhhehxok`, Frankfurt, Postgres 17) + lokale Instanz (Docker). Ein separates Projekt mit Produktivdaten existiert und wird von Agenten **nie** verwendet. Kein Prisma/Clerk im Repo (nichts zu entfernen). |
 | Besonderheit Next 16 | `middleware.ts` heißt jetzt **`proxy.ts`** (Node-Runtime als Standard). Vor jedem Code die Doku in `saas/node_modules/next/dist/docs/` lesen (siehe `saas/AGENTS.md`). |
 | Baseline | `bun run lint` ✔, `tsc --noEmit` ✔ (25.11.2026) |
 
