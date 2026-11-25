@@ -83,8 +83,10 @@ Status: offen · in Arbeit · erledigt · **Frage** (Freigabe nötig, siehe Absc
 
 | Datum | Agent | Aufgabe | Ergebnis | Skills/MCPs | Tests | Commit |
 |---|---|---|---|---|---|---|
-| 2026-11-25 | Main | GitHub-Einrichtung (Labels, Meilensteine Phase 0–6, 24 Issues, Project #2) | **Teilweise**: Labels und 2 Meilensteine angelegt; Issues wegen GitHub-Störung („Issues: major_outage“ laut githubstatus.com) noch nicht. Idempotentes Skript wird nach Ende der Störung erneut ausgeführt. | gh CLI | – | – |
+| 2026-11-25 | Main | GitHub-Einrichtung abgeschlossen | Labels (Typ, Priorität, `agent: …`, `blocked`), 7 Meilensteine (Phase 0–6), Issues **#1–#24** angelegt und alle im Project #2. Status: #1 Done (geschlossen), übrige Backlog. Prioritäten P0/P1/P2 gesetzt. Phase-1-Aufgaben #3–#13 als Sub-Issues von Epic #2; Abhängigkeiten als „blocked by“ verknüpft. Start-/Zieldatum bisher nur für #1 gesetzt (Rest folgt bei Arbeitsbeginn). | gh CLI | Kontrolle: 24/24 Items im Project, 0 ohne Meilenstein, Sub-Issues und Abhängigkeiten stichprobenhaft geprüft ✔ | – |
+| 2026-11-25 | Main | GitHub-Einrichtung (1. Versuch) | Abgebrochen wegen GitHub-Störung („Issues: major_outage“); nur Labels und 2 Meilensteine angelegt, keine Duplikate. | gh CLI | – | – |
 | 2026-11-25 | Main | Supabase-Dev-Projekt angelegt, MCP umgestellt | Projekt `Raumplanungs_SaaS` (Ref `nojkevaqbjllfhhehxok`, eu-central-1, Postgres 17, Free-Tarif, 0 €) per MCP angelegt; Status ACTIVE_HEALTHY; Security-Advisors: keine Befunde. `.vscode/mcp.json` jetzt `project_ref` + `read_only=true` + `features=database,docs,debugging,development`. Bestehendes Projekt „Raumplanung-SaaS“ (eu-west-1) enthält laut Nutzer **Produktivdaten** und wird **nicht** angefasst. Docker Desktop 29.9.3 läuft. | Supabase-MCP (`list_organizations`, `list_projects`, `create_project`, `get_project`, `get_advisors`) | Advisors ✔ | siehe Git |
+| 2026-11-25 | Main | Prisma CLI installieren und initialisieren | Prisma **7.10.1** + dotenv **18.0.10** fest gepinnt in `saas/package.json`/`bun.lock`; Prisma-Schema und `prisma.config.ts` angelegt. `.env.local` ignoriert Git und enthält die Dev-URLs als Vorlagen mit `[YOUR-PASSWORD]` (noch durch Nutzer zu ersetzen). Prisma CLI liest `DIRECT_URL` für Introspection. Kein DB-Zugriff oder Migration ausgeführt. | Supabase-Skill, Prisma CLI v7-Doku, Supabase Prisma-Doku | `prisma validate` ✔, `prisma generate` ✔, `bun run lint` ✔, TypeScript-Check ✔, `bun run build` ✔ (Next-Warnung: übergeordnetes `package-lock.json` außerhalb des Repos) | noch nicht committet |
 | 2026-11-25 | Main | Phase 0: Vorlagen ausgewertet, Matrix, Stack-Analyse, Konzepte | Erste Fassung PROGRESS/ARCHITECTURE | Web-Suche/Fetch (Supabase-Doku, Kalender-Lizenzen), Next-16-Doku aus `node_modules/next/dist/docs` | Baseline: `bun run lint` ✔, `tsc --noEmit` ✔ | `077b492` |
 | 2026-11-25 | Main | Supabase-MCP vorbereitet | `.vscode/mcp.json` **temporär** mit `features=account,docs` (ohne Token, ohne Projektbindung) zum Anlegen des Projekts; danach Umstellung auf `project_ref` + `read_only=true` | – | – | – |
 | 2026-11-25 | Main | GitHub CLI installiert | `gh` 2.105.0 per winget (Hash geprüft); Anmeldung durch Nutzer ausstehend | – | – | – |
@@ -133,7 +135,7 @@ Noch keine Prüfung (Wächter startet nach Freigabe von Phase 0). Erste Hinweise
 ## 7. Offene Fragen und Risiken
 
 **Offen (Werkzeuge):**
-1. GitHub-Issues anlegen, sobald die GitHub-Störung behoben ist (Main Agent).
+1. ~~GitHub-Issues anlegen~~ – erledigt (#1–#24).
 2. Nutzer: DB-Passwort des Dev-Projekts im Dashboard zurücksetzen und `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_SENTRY_DSN` des **Dev-Projekts** in `saas/.env.local` eintragen (Datei existiert noch nicht).
 3. Nutzer: Secret Scanning und Push Protection aktivieren.
 4. Sitzung neu laden, damit die Supabase-Skills geladen werden.

@@ -64,6 +64,7 @@ Freigegeben am 25.11.2026. Abweichend von der ursprünglichen Empfehlung gilt be
 - **RLS bleibt aktiv:** Prisma-Client-Extension führt jede Abfrage in einer Transaktion aus: `set local role authenticated` + `set_config('request.jwt.claims', <verifizierte Claims>, true)`. Damit gelten dieselben Policies wie bei supabase-js. Zusätzlich prüft der Server-Code Rolle und Mandant (doppelte Absicherung).
 - **System-Client:** separater Prisma-Client ohne Rollenwechsel nur für vertrauenswürdige Serveraufgaben (Healthchecks, Einladungen, Jobs), nie aus Nutzereingaben gesteuert.
 - **Verbindungen:** `DATABASE_URL` = Supavisor im Transaction-Modus (Port 6543, `pgbouncer=true`) für Vercel; `DIRECT_URL` = Session-/Direktverbindung für Introspection. Eigene DB-Rolle für Prisma (ohne Superuser), die in `authenticated` wechseln darf.
+- **Prisma 7 CLI:** Verbindungs-URLs liegen in `prisma.config.ts`, nicht mehr als `url`/`directUrl` im Schema. Die Konfiguration liest `DIRECT_URL` aus `saas/.env.local` für Introspection. Das Schema deklariert nur den PostgreSQL-Provider; SQL-Migrationen bleiben bei der Supabase CLI.
 - **Messung in Phase 1:** Overhead der RLS-Extension je Abfrage.
 
 ## 4. Zielstruktur (Vorschlag)
