@@ -104,6 +104,8 @@ Noch keine Prüfung (Wächter startet nach Freigabe von Phase 0). Erste Hinweise
 | W-000 | Hinweis | `saas/Credentials.txt` | Lokale Datei mit vermutlich Zugangsdaten; ist per `saas/.gitignore` ausgeschlossen und nie committet worden. Inhalt nicht gelesen. Empfehlung: Inhalte in `.env.local` bzw. Passwortmanager überführen. | offen |
 | W-001 | Hinweis | `saas/.gitignore` | `.env*` schließt auch die geplante `.env.example` aus → Ausnahme `!.env.example` in Phase 1 ergänzen. | offen |
 | W-002 | Hinweis | Repo-Einstellungen | GitHub Secret Scanning und Push Protection aktivieren (nur durch Repo-Owner möglich). | offen |
+| W-003 | Hinweis | `saas/sentry.common.ts` (uncommittet, vom Nutzer per Sentry-Wizard angelegt) | EU-Ingest ✔, `userInfo`/Cookies/Header/Bodies aus ✔, Source-Maps aus ✔, kein Auth-Token ✔. Verbesserungen für Sentry-Issue: DSN aus `NEXT_PUBLIC_SENTRY_DSN` statt hartkodiert (nicht geheim, aber umgebungsabhängig); `genAI.inputs/outputs` auf `false` (Datensparsamkeit); `beforeSend`-Filter ergänzen. | offen |
+| W-004 | Hinweis | `saas/next.config.ts` / `saas/AGENTS.md` | `experimental.agentFeedback` ist aktiv; `next dev` schreibt einen Feedback-Block in AGENTS.md, Agenten melden anonymisiertes Feedback an Next.js. Prüfen, ob gewünscht. | offen |
 
 ## 6. Entscheidungen
 
